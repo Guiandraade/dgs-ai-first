@@ -1,60 +1,60 @@
-# dgs-ai-first
+# DGS AI First — Cenário 1
 
-Prova de conceito de um pipeline RAG (Retrieval-Augmented Generation) para o assistente de atendimento interno da NovaTech — empresa de logística fictícia usada como cenário de treinamento no programa DB1 AI-First.
-
-O problema central: atendentes gastam em média 12 minutos por chamado buscando regras espalhadas em múltiplas fontes, com documentos que às vezes se contradizem. O objetivo do pipeline é responder perguntas sobre devolução, frete, SLA e procedimentos sempre com base documental e indicação de fonte — sem inventar informação.
+**Autor:** Guilherme Nascimento  
+**Papel:** Desenvolvedor  
+**Programa:** DB1 Global Software — Certificação DGS AI First  
+**Branch de entrega:** `cenario-1`  
+**Data:** 06/06/2026
 
 ---
 
-## Estrutura do projeto
+## O que é este repositório
+
+Entregáveis do **Cenário 1** da certificação DGS AI First. O cenário simula um projeto real: a NovaTech, empresa de logística com 1.200 funcionários, contrata a DB1 para construir um assistente de IA que responde perguntas dos atendentes com base na documentação interna — sem inventar informação.
+
+Os exercícios cobrem fundamentos de LLM, engenharia de contexto, prototipação de system prompt e implementação de um pipeline RAG funcional com ferramentas open-source.
+
+---
+
+## Estrutura do repositório
 
 ```
 assets/
   anexos/
-    anexo-a-documentos-individuais/    <- 5 documentos fonte (input do pipeline)
-    anexo-b-chunks-referencia-rag.md   <- gabarito de retrieval (mapa pergunta → chunks esperados)
-rag/                                   <- pipeline RAG implementado
-  ingest.py
-  search.py
-  prompt_builder.py
-  run_tests.py
-  requirements.txt
-  chroma_db/                           <- vector store gerado automaticamente (ignorado pelo git)
-  prompts_para_claude/                 <- prompts prontos para colar no Claude chat (gerado pelo run_tests.py)
+    anexo-a-documentos-individuais/    ← 5 documentos fonte da NovaTech (input do pipeline)
+    anexo-b-chunks-referencia-rag.md   ← gabarito de retrieval (mapa pergunta → chunks esperados)
+  copilot-sugestao-ingest.png          ← evidência de uso do GitHub Copilot
+
 exercicios/
   fase-1/
-    exercicio-fase-1-entendimento.md   <- enunciado dos exercícios
-    entregaveis/                       <- resoluções e análises
+    exercicio-fase-1-entendimento.md   ← enunciado original dos exercícios
+    entregaveis/
+      exercicio-1.1-resolucao.md       ← análise de viabilidade técnica + revisão com Claude
+      exercicio-1.2-resolucao.md       ← system prompt v1/v2 + testes + análise crítica
+      exercicio-1.3-resolucao.md       ← pipeline RAG + resultados reais + problemas identificados
+
+rag/                                   ← pipeline RAG implementado em Python
+  ingest.py                            ← leitura, chunking, embeddings, ChromaDB
+  search.py                            ← busca semântica por distância cosseno
+  prompt_builder.py                    ← montagem do prompt com mitigation lost-in-middle
+  run_tests.py                         ← 6 testes de retrieval com saída para prompts_para_claude/
+  requirements.txt
+  prompts_para_claude/                 ← prompts gerados para colar no Claude chat (p1 a p6)
 ```
 
 ---
 
-## Base documental
+## Exercícios entregues
 
-Cinco documentos simulados da NovaTech em `assets/anexos/anexo-a-documentos-individuais/`:
-
-| Arquivo | Tipo | Detalhe |
-|---------|------|---------|
-| `POL-001-politica-devolucao.md` | Normativo | Cargas perigosas **não** seguem o processo padrão |
-| `PROC-042-frete-especial-v1.md` | Procedimento | Versão **obsoleta** — multiplicadores diferentes da v2 |
-| `PROC-042-v2-frete-especial-revisado.md` | Procedimento | Versão **atual** — coexiste com v1 sem hierarquia formal |
-| `SLA-2024-tabela-sla-clientes.md` | Contratual | Apenas 3 tiers: Gold, Silver, Standard. **Não existe Platinum** |
-| `FAQ-atendimento.md` | Informal | Documento colaborativo, não validado por Compliance |
+| Exercício | Tema | Ferramenta | Entregável |
+|-----------|------|-----------|------------|
+| 1.1 | Análise de viabilidade técnica + engenharia de contexto | Claude (chat) | [exercicio-1.1-resolucao.md](exercicios/fase-1/entregaveis/exercicio-1.1-resolucao.md) |
+| 1.2 | Prototipação de system prompt | Claude (chat) | [exercicio-1.2-resolucao.md](exercicios/fase-1/entregaveis/exercicio-1.2-resolucao.md) |
+| 1.3 | Pipeline RAG funcional | Claude + GitHub Copilot | [exercicio-1.3-resolucao.md](exercicios/fase-1/entregaveis/exercicio-1.3-resolucao.md) |
 
 ---
 
-## Stack
-
-- **Python 3.11**
-- **ChromaDB** — vector store local (distância cosseno)
-- **sentence-transformers** (`all-MiniLM-L6-v2`) — embeddings open-source
-- **Claude** (chat manual) — geração de resposta final
-
-Sem LangChain. O pipeline é código manual para tornar cada etapa explícita.
-
----
-
-## Como rodar
+## Pipeline RAG — Como rodar
 
 ### Pré-requisito
 
@@ -71,7 +71,7 @@ Lê os 5 arquivos `.md`, aplica chunking por tipo de documento, gera embeddings 
 python ingest.py
 ```
 
-Saída esperada (com os documentos atuais):
+Saída real da execução:
 ```
 FAQ-atendimento.md: 10 chunks
 POL-001-politica-devolucao.md: 6 chunks
@@ -81,59 +81,46 @@ SLA-2024-tabela-sla-clientes.md: 6 chunks
 Total: 35 chunks
 Ingestão concluída.
 ```
-Rodar novamente apenas quando os documentos fonte forem atualizados.
 
 ### Passo 2 — Executar os testes de retrieval
-
-Roda as 6 perguntas de teste, compara os chunks recuperados com o gabarito do Anexo B e salva os prompts prontos em `prompts_para_claude/`.
 
 ```bash
 python run_tests.py
 ```
 
-### Passo 3 — Busca avulsa (opcional)
+Roda as 6 perguntas do gabarito e salva os prompts prontos em `prompts_para_claude/`.
 
-Para testar qualquer pergunta diretamente:
+### Passo 3 — Busca avulsa (opcional)
 
 ```bash
 python search.py "Qual o prazo de devolução?"
 ```
 
-Retorna os 5 chunks mais similares com score de similaridade e indicação de versão (atual/obsoleta).
+### Passo 4 — Avaliar no Claude chat
 
-### Passo 4 — Geração de resposta no Claude
-
-Os arquivos `prompts_para_claude/p1_prompt.txt` a `p6_prompt.txt` contêm o prompt completo (system prompt + chunks recuperados + pergunta) para cada teste.
-
-O pipeline não chama a API do Claude por escolha deliberada — o enunciado pede geração via **Claude chat manual**, sem API. Esses arquivos são a ponte entre o pipeline e o LLM:
-
-1. Abra [claude.ai](https://claude.ai) e inicie uma conversa nova
-2. Abra um dos arquivos `.txt` em `prompts_para_claude/`
-3. Copie o conteúdo completo e cole no Claude
-4. Avalie a resposta: citou a fonte? Respeitou os guardrails? Inventou algo?
+Os arquivos `prompts_para_claude/p1_prompt.txt` a `p6_prompt.txt` contêm o prompt completo pronto para colar no [claude.ai](https://claude.ai). O pipeline não chama a API — o enunciado pede avaliação via Claude chat manual.
 
 ---
 
-## Estratégia de chunking
+## Stack
 
-O chunking é feito por **tipo de documento**, não por número fixo de tokens:
+- **Python 3.11**
+- **ChromaDB** — vector store local (distância cosseno)
+- **sentence-transformers** (`all-MiniLM-L6-v2`) — embeddings open-source
+- **Claude** (chat manual) — geração e avaliação das respostas
+- **GitHub Copilot** — assistência no desenvolvimento do pipeline
 
-| Documento | Estratégia | Motivo |
-|-----------|-----------|--------|
-| POL-001 | Por subseção `###` | Cada subseção é uma regra independente; misturar 3.1 com 3.2 confunde regra geral com exceção de carga perigosa |
-| PROC-042 v1/v2 | Por bloco lógico (fórmula, multiplicadores, prazo, condições, transição) | Tabela de multiplicadores deve ser recuperada como unidade atômica |
-| SLA-2024 | Por bloco de tabela + definições | Tabela cortada no meio perde o SLA de resolução de um tier |
-| FAQ | Por item individual `## Item N` | Cada Q&A é uma unidade semântica; agrupar itens mistura tópicos díspares |
+Sem LangChain. O pipeline é código manual para tornar cada etapa explícita e auditável.
 
 ---
 
-## Perguntas de teste e gabarito
+## Resultados dos testes (execução real)
 
-| ID | Pergunta | Chunks esperados (Anexo B) | Propósito |
-|----|----------|--------------------------|-----------|
-| P1 | Qual o prazo de devolução? | POL-001-A, POL-001-B | Baseline |
-| P2 | Posso devolver carga perigosa? | POL-001-B, FAQ-03 | Negação explícita |
-| P3 | Qual o SLA do cliente Gold? | SLA-2024-B | Domínio contratual / tabela |
-| P4 | Qual o SLA do cliente Platinum? | SLA-2024-A (diz que não existe) | Teste de alucinação |
-| P5 | Frete para 600kg para Manaus? | PROC-042v2-A, PROC-042v2-B | Conflito v1 vs v2 |
-| P6 | Frete para 300kg para Salvador? | nenhum (carga abaixo de 500kg) | Não-cobertura documental |
+| ID | Pergunta | Resultado retrieval | Observação |
+|----|----------|-------------------|------------|
+| P1 | Prazo de devolução? | ✅ POL-001 recuperado | Seção 3.1 ficou em 4º — não entrou no top 3 |
+| P2 | Pode devolver carga perigosa? | ✅ POL-001 recuperado | Seção 3.2 (proibição) não entrou no top 5 — FAQ dominou |
+| P3 | SLA Gold? | ✅ SLA-2024 recuperado | Tabela (seção 2) não entrou no top 3 |
+| P4 | SLA Platinum? | ✅ Alucinação bloqueada | FAQ Item 15 ("Platinum não existe") ficou em 1º |
+| P5 | Frete 600kg Manaus? | ✅ PROC-042-v2 recuperado | Tabela de multiplicadores não entrou no top 5 |
+| P6 | Frete 300kg Salvador? | ✅ Sem cobertura detectada | min_score = 0.94 > threshold 0.5 |
