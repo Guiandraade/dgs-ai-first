@@ -107,20 +107,24 @@ Para entender o corpus de retrieval disponível para o endpoint:
 
 **Resultado:**
 ```
-POL-001-politica-devolucao/
-  chunk_001.json  chunk_002.json  chunk_003.json
-  chunk_004.json  chunk_005.json  chunk_006.json
-PROC-042-frete-especial-v1/
-  chunk_001.json ... chunk_006.json
-PROC-042-v2-frete-especial-revisado/
-  chunk_001.json ... chunk_007.json
-SLA-2024-tabela-sla-clientes/
-  chunk_001.json ... chunk_006.json
-FAQ-atendimento/
-  chunk_001.json ... chunk_010.json
+chunks-novatech.md
+README.md
 ```
 
-**Uso:** confirmou que o endpoint deve trabalhar com 35 chunks distribuídos por 5 documentos fonte — base para definir o parâmetro `topK: 5` na integração do SearchService (TASK-003).
+**Tool call:** `filesystem-ro` → `read_file("./data/retrieval-corpus/chunks-novatech.md")` (trecho)
+
+**Resultado (primeiras linhas):**
+```
+## Anexo B — Chunks de Referência do Pipeline de RAG
+
+### Chunks da POL-001 (Política de Devolução)
+
+**Chunk POL-001-A** — Seção 3.1: Prazo geral
+
+> O cliente pode solicitar a devolução de mercadorias em até 7 (sete) dias úteis...
+```
+
+**Uso:** confirmou que o corpus é um único arquivo markdown com 35 chunks distribuídos por 5 documentos fonte — base para definir o parâmetro `topK: 5` na integração do SearchService (TASK-003).
 
 ---
 
@@ -166,6 +170,20 @@ bbdd03a  chore: starter repo (Anexo D) — estrutura + dados semeados dos Anexos
 **Impacto:** Médio. Risco de vazamento de dados sensíveis (queries de usuários reais, mensagens de erro com PII).
 
 **Mitigação adotada:** Encerrar o processo do servidor memory ao fim de cada sessão de desenvolvimento. Para mitigação estrutural: implementar TTL de 8 h no servidor ou usar namespace por usuário (`dev:guilherme:*`).
+
+---
+
+### Risco 3 — `filesystem-ro` não garante read-only tecnicamente
+
+**Descrição:** O `@modelcontextprotocol/server-filesystem` não possui flag de somente-leitura. Ambos os servers (`filesystem-rw` e `filesystem-ro`) usam o mesmo pacote e expõem as mesmas ferramentas de escrita (`write_file`, `create_directory`). A separação em dois servers é uma convenção organizacional, não uma restrição técnica.
+
+**Vetor de ataque:** um agente com instrução ambígua ("atualize o documento de SLA") poderia escrever em `./docs/novatech/` mesmo que a intenção fosse só leitura.
+
+**Probabilidade:** Baixa em uso normal, mas sem garantia técnica.
+
+**Impacto:** Médio. Sobrescrita de documentos de referência da NovaTech corromperia a base documental do assistente.
+
+**Mitigação:** A proteção real vem do AGENTS.md, que instrui o agente a não modificar `./docs/novatech/` e `./data/retrieval-corpus/`. Para proteção técnica futura: usar permissões de sistema de arquivos (`chmod 444`) nas pastas de referência antes de iniciar os servers.
 
 ---
 

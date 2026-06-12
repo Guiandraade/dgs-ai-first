@@ -52,6 +52,21 @@ Artifact (receitas completas, composição de múltiplas skills)
 | `create-integration-test` | Artifact | `testing-patterns`, `azure-functions-endpoint` |
 | `create-react-card` | Artifact | `react-components`, `azure-ai-search-integration` |
 
+### Mapeamento por papel e agente
+
+| Skill | Criador | Consumidores humanos | Consumidores IA | Frequência |
+|---|---|---|---|---|
+| `typescript-conventions` | Tech Lead | Dev, Dev Sênior | Copilot, Claude Code | Toda task de código |
+| `project-structure` | Tech Lead | Dev, Dev Sênior, QA | Copilot, Claude Code | Onboarding + nova feature |
+| `error-handling` | Tech Lead | Dev, Dev Sênior | Copilot, Claude Code | Toda função com I/O externo |
+| `azure-functions-endpoint` | Tech Lead | Dev | Copilot | 1× por endpoint (~5 no projeto) |
+| `azure-ai-search-integration` | Tech Lead | Dev | Copilot | pipeline-ingestao + query-endpoint |
+| `testing-patterns` | QA | Dev, QA | Copilot | Toda task de código |
+| `react-components` | Dev Sênior | Dev | Copilot | painel web (~10 componentes) |
+| `create-rag-endpoint` | Tech Lead + Dev Sênior | Dev | Copilot, Claude Code | 1× (query-endpoint) |
+| `create-integration-test` | QA | Dev, QA | Copilot | 1× por endpoint (~5) |
+| `create-react-card` | Dev Sênior | Dev | Copilot | painel web (~6 cards) |
+
 ### Justificativa da hierarquia
 
 **Foundation** agrupa conhecimento pré-requisito que qualquer colaborador precisa dominar antes de tocar código. São agnósticos de framework: `error-handling` se aplica a qualquer módulo TypeScript, não apenas Azure Functions.
