@@ -335,3 +335,14 @@ Retrieval correto (nível de fonte): 6/6
 **Proposta de correção:**
 - Adicionar **sumário semântico** a cada chunk no momento da ingestão: uma frase gerada por LLM descrevendo o conteúdo específico do chunk (ex: "Esta seção contém os multiplicadores regionais de frete: Sul 1.0, Sudeste 1.0, Norte 1.8, Nordeste 1.4, Centro-Oeste 1.2"). Embedar o sumário em vez do texto bruto melhora a recuperação por queries de intenção.
 - Alternativa mais simples: duplicar as linhas da tabela de multiplicadores como metadados de texto nos chunks adjacentes, aumentando a densidade de termos relevantes.
+
+### Problema 4 — Chunks de segurança crítica ficando fora do top 5 (P2)
+
+**Observação real da execução:** Para P2 (carga perigosa), a seção 3.2 da POL-001 — que contém a negativa explícita "cargas das classes 1 a 6 da ANTT **não são elegíveis** para devolução pelo processo padrão" — não apareceu nos 5 primeiros resultados. Os chunks do FAQ informal dominaram com scores melhores (0.63, 0.69, 0.76) do que a seção formal (que ficou em 5º com 0.87). O FAQ Item 3 diz "pode ser viabilizado como exceção" — orientação que conflita diretamente com a proibição formal.
+
+**Impacto em produção:** Um atendente receberia orientação baseada apenas no FAQ ("análise especializada, pode ser autorizado como exceção") sem a negativa formal da POL-001. Em termos regulatórios, isso é o pior cenário — o sistema não apenas falha em recuperar a regra, mas recupera uma fonte que contradiz a regra e tem score mais alto.
+
+**Proposta de correção:**
+- Para queries que contêm termos de segurança regulatória ("perigosa", "ANTT", "classe 1", "classe 2", "inflamável"), implementar **retrieval determinístico**: forçar inclusão do chunk POL-001 seção 3.2 independente do score vetorial. Essa abordagem é justificada pela criticidade — um erro aqui tem consequência regulatória, não apenas de experiência do usuário.
+- Manter o campo `critico` nos metadados de chunks: chunks marcados como críticos entram automaticamente no prompt quando a query contém termos da lista de segurança.
+- Exemplo de implementação em `search.py`: antes de retornar os top-N, checar se a query contém termos da lista de segurança e, se sim, injetar o chunk crítico na posição 1, deslocando os demais.
