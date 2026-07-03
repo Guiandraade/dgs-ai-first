@@ -1,16 +1,16 @@
-# DGS AI First — Cenário 2
+# DGS AI First — Cenário 3
 
 **Autor:** Guilherme Nascimento
 **Papel:** Desenvolvedor
 **Programa:** DB1 Global Software — Certificação DGS AI First
-**Branch de entrega:** `cenario-2`
-**Data:** 12/06/2026
+**Branch de entrega:** `cenario-3`
+**Data:** 03/07/2026
 
 ---
 
 ## O que é este repositório
 
-Entregáveis dos **Cenários 1 e 2** da certificação DGS AI First. O cenário simula um projeto real: a NovaTech, empresa de logística com 1.200 funcionários, que contrata a DB1 para construir um assistente de IA que responde perguntas dos atendentes com base na documentação interna.
+Entregáveis dos **Cenários 1, 2 e 3** da certificação DGS AI First. O cenário simula um projeto real: a NovaTech, empresa de logística com 1.200 funcionários, que contrata a DB1 para construir um assistente de IA que responde perguntas dos atendentes com base na documentação interna.
 
 ---
 
@@ -28,6 +28,30 @@ exercicios/
     exercicio-fase-1-entendimento.md   ← enunciado original
     entregaveis/
       exercicio-1.1-resolucao.md       ← análise de viabilidade técnica
+  fase-3/
+    entregaveis/
+      exercicio-3.1-resolucao.md       ← structured output + guardrails determinísticos
+      exercicio-3.2-resolucao.md       ← revisão crítica de código gerado por IA
+      evidencias-fase-3.md             ← índice de evidências da fase
+      checklist-conformidade-fase-3.md ← checklist final de conformidade
+    artefatos/
+      response-validator.ts            ← validação determinística de resposta do modelo
+      feedback-handler.ts              ← módulo de feedback reescrito conforme AGENTS
+
+src/
+  services/
+    response-validator.ts              ← path canônico do enunciado 3.1
+  functions/
+    feedback/
+      handler.ts                       ← path canônico do enunciado 3.2
+
+assets/
+  evidencias/
+    fase-3/
+      claude-3.1-review-*.png          ← evidências reais de revisão/iteração
+      claude-3.2-review-*.png
+      copilot-3.1-geracao-inicial-*.png
+      copilot-3.2-refactor-*.png
       exercicio-1.2-resolucao.md       ← system prompt v1/v2 + testes
       exercicio-1.3-resolucao.md       ← pipeline RAG + resultados reais
   fase-2/
@@ -95,6 +119,15 @@ assets/
 | Evidências | Índice de evidências da fase | [evidencias-fase-3.md](exercicios/fase-3/entregaveis/evidencias-fase-3.md) |
 | Conformidade | Checklist oficial de critérios | [checklist-conformidade-fase-3.md](exercicios/fase-3/entregaveis/checklist-conformidade-fase-3.md) |
 
+### Fase 3 — Governança e Validação (Developer)
+
+| Exercício | Tema | Entregável |
+|-----------|------|------------|
+| 3.1 | Structured output + verificações determinísticas | [exercicio-3.1-resolucao.md](exercicios/fase-3/entregaveis/exercicio-3.1-resolucao.md) |
+| 3.2 | Revisão crítica de código gerado por IA | [exercicio-3.2-resolucao.md](exercicios/fase-3/entregaveis/exercicio-3.2-resolucao.md) |
+| Evidências | Índice de evidências da fase | [evidencias-fase-3.md](exercicios/fase-3/entregaveis/evidencias-fase-3.md) |
+| Conformidade | Checklist oficial de critérios | [checklist-conformidade-fase-3.md](exercicios/fase-3/entregaveis/checklist-conformidade-fase-3.md) |
+
 ---
 
 ## Pipeline RAG — Como rodar (Fase 1)
@@ -127,3 +160,7 @@ Resultados dos testes de retrieval:
 ### Fase 2 (TypeScript)
 - **Azure Functions v4**, **Zod**, **pino**, **TypeScript 5.5**, **Vitest**
 - Workspace local: `novatech-assistant` (Anexo D do enunciado)
+
+### Fase 3 (TypeScript + Governança)
+- **Structured outputs com Zod**, **guardrails determinísticos**, **revisão crítica de outputs de IA**
+- Evidências reais de uso de **Claude** e **GitHub Copilot** versionadas em `assets/evidencias/fase-3/`
