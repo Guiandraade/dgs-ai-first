@@ -46,9 +46,17 @@ exercicios/
       exercicio-3.1-resolucao.md       ← structured output + guardrails deterministicos
       exercicio-3.2-resolucao.md       ← revisao critica de codigo IA + modulo reescrito
       evidencias-fase-3.md             ← indice de evidencias da fase de governanca
+      checklist-conformidade-fase-3.md ← conformidade PASS/PENDENTE por criterio oficial
     artefatos/
       response-validator.ts            ← validacao deterministica de respostas do modelo
       feedback-handler.ts              ← handler de feedback reescrito conforme AGENTS.md
+
+src/
+  services/
+    response-validator.ts              ← path canonico pedido no enunciado (3.1)
+  functions/
+    feedback/
+      handler.ts                       ← path canonico pedido no enunciado (3.2)
 
 rag/                                   ← pipeline RAG implementado em Python (Fase 1)
 
@@ -85,6 +93,7 @@ assets/
 | 3.1 | Structured output + verificações determinísticas | [exercicio-3.1-resolucao.md](exercicios/fase-3/entregaveis/exercicio-3.1-resolucao.md) |
 | 3.2 | Revisão crítica de código gerado por IA | [exercicio-3.2-resolucao.md](exercicios/fase-3/entregaveis/exercicio-3.2-resolucao.md) |
 | Evidências | Índice de evidências da fase | [evidencias-fase-3.md](exercicios/fase-3/entregaveis/evidencias-fase-3.md) |
+| Conformidade | Checklist oficial de critérios | [checklist-conformidade-fase-3.md](exercicios/fase-3/entregaveis/checklist-conformidade-fase-3.md) |
 
 ---
 

@@ -9,8 +9,11 @@ Este arquivo indexa as evidencias de execucao e revisao dos exercicios 3.1 e 3.2
 | EV-3-001 | Captura de tela de apoio da fase de governanca | [assets/evidencias/fase-3/captura-governanca-2026-06-23-163908.png](../../../assets/evidencias/fase-3/captura-governanca-2026-06-23-163908.png) | 3.1, 3.2 | Captura indexada e versionada no repositorio |
 | EV-3-002 | Implementacao do validador deterministico | [exercicios/fase-3/artefatos/response-validator.ts](../artefatos/response-validator.ts) | 3.1 | Structured output + guardrails bloqueantes |
 | EV-3-003 | Reescrita do modulo de feedback | [exercicios/fase-3/artefatos/feedback-handler.ts](../artefatos/feedback-handler.ts) | 3.2 | Correcoes de AGENTS.md (Zod, pino, sem PII em log) |
+| EV-3-003A | Modulo no path canonico do enunciado | [src/services/response-validator.ts](../../../src/services/response-validator.ts) | 3.1 | Espelhado em `/src/services/response-validator.ts` |
+| EV-3-003B | Modulo no path canonico do enunciado | [src/functions/feedback/handler.ts](../../../src/functions/feedback/handler.ts) | 3.2 | Espelhado em `/src/functions/feedback/handler.ts` |
 | EV-3-004 | Relatorio tecnico do exercicio 3.1 | [exercicios/fase-3/entregaveis/exercicio-3.1-resolucao.md](./exercicio-3.1-resolucao.md) | 3.1 | Review e decisoes tecnicas documentadas |
 | EV-3-005 | Relatorio tecnico do exercicio 3.2 | [exercicios/fase-3/entregaveis/exercicio-3.2-resolucao.md](./exercicio-3.2-resolucao.md) | 3.2 | Comparacao humano x Claude e checklist de conformidade |
+| EV-3-006 | Checklist oficial de conformidade | [exercicios/fase-3/entregaveis/checklist-conformidade-fase-3.md](./checklist-conformidade-fase-3.md) | 3.1, 3.2 | Status PASS/PENDENTE por criterio |
 
 ## Pendencias recomendadas para avaliacao final
 
