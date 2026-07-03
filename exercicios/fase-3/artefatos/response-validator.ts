@@ -40,20 +40,20 @@ function mentionsDangerousReturn(answer: string): boolean {
 
 function allowsDangerousReturn(answer: string): boolean {
   const normalized = normalizeForMatch(answer);
+  const permissiveClausePattern =
+    /\b(pode|podem|permitid[ao]s?|possivel|autorizad[ao]s?)\b.{0,40}\bdevol/g;
+  const localNegationPattern = /\b(nao|nunca|jamais)\b/;
 
-  const negationNearby = /\b(nao|nunca|jamais)\b.{0,15}\b(pode|podem|permitid[ao]s?|possivel|autorizad[ao]s?)\b/;
+  let match: RegExpExecArray | null;
+  while ((match = permissiveClausePattern.exec(normalized)) !== null) {
+    const start = match.index ?? 0;
+    const localWindow = normalized.slice(Math.max(0, start - 25), start);
+    if (!localNegationPattern.test(localWindow)) {
+      return true;
+    }
+  }
 
-  const permissivePatterns = [
-    /\bpode\b.{0,40}\bdevol/,
-    /\bpodem\b.{0,40}\bdevol/,
-    /\bpermitid[ao]s?\b.{0,40}\bdevol/,
-    /\bpossivel\b.{0,40}\bdevol/,
-    /\bautorizad[ao]s?\b.{0,40}\bdevol/,
-  ];
-
-  return permissivePatterns.some(
-    (pattern) => pattern.test(normalized) && !negationNearby.test(normalized)
-  );
+  return false;
 }
 
 export function validateModelResponse(raw: unknown, requestId: string): ValidationResult {

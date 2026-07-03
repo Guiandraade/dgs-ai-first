@@ -2,6 +2,7 @@ import { app, HttpRequest, HttpResponseInit, InvocationContext } from '@azure/fu
 import { CosmosClient } from '@azure/cosmos';
 import pino from 'pino';
 import { z } from 'zod';
+import { AppError } from '../../shared/errors.js';
 
 const logger = pino({ name: 'feedback-handler' });
 
@@ -13,17 +14,6 @@ const FeedbackSchema = z.object({
 });
 
 type FeedbackInput = z.infer<typeof FeedbackSchema>;
-
-class AppError extends Error {
-  constructor(
-    public readonly code: string,
-    message: string,
-    public readonly status: number
-  ) {
-    super(message);
-    this.name = 'AppError';
-  }
-}
 
 function sanitizeForLogs(feedback: FeedbackInput) {
   return {
@@ -57,8 +47,23 @@ export async function feedbackHandler(
 ): Promise<HttpResponseInit> {
   const requestId = context.invocationId;
 
+  let rawBody: unknown;
+
   try {
-    const rawBody = await request.json();
+    rawBody = await request.json();
+  } catch (err) {
+    logger.warn({ requestId, err }, 'invalid_json');
+    return {
+      status: 400,
+      jsonBody: {
+        error: 'INVALID_JSON',
+        message: 'Request body must be valid JSON',
+        requestId,
+      },
+    };
+  }
+
+  try {
     const parsed = FeedbackSchema.safeParse(rawBody);
 
     if (!parsed.success) {
