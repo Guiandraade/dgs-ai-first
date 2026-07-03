@@ -9,6 +9,8 @@ Cada tarefa é atômica: pode ser implementada e testada de forma independente.
 
 **Descrição:** Criar o Azure Function HTTP trigger para o endpoint `POST /api/query` com validação de input via Zod, logging estruturado via pino e tratamento de erros via `AppError`.
 
+**Estimativa:** P
+
 **Dependências:** TASK-002 (AppError deve existir antes de importar)
 
 **Critério de aceitação:**
@@ -28,6 +30,8 @@ Cada tarefa é atômica: pode ser implementada e testada de forma independente.
 
 **Descrição:** Criar `src/shared/errors.ts` com a classe `AppError` e `src/shared/types.ts` com os tipos de request/response do query endpoint.
 
+**Estimativa:** P
+
 **Dependências:** nenhuma
 
 **Critério de aceitação:**
@@ -42,6 +46,8 @@ Cada tarefa é atômica: pode ser implementada e testada de forma independente.
 ## TASK-003 — Integração SearchService
 
 **Descrição:** Conectar o handler ao `SearchService` em `src/services/search.ts` para recuperar os top-N chunks semanticamente relevantes à query.
+
+**Estimativa:** M
 
 **Dependências:** TASK-001, TASK-002
 
@@ -58,6 +64,8 @@ Cada tarefa é atômica: pode ser implementada e testada de forma independente.
 
 **Descrição:** Montar o prompt com os chunks recuperados via `PromptBuilderService` e chamar o `CompletionService` para obter a resposta do modelo.
 
+**Estimativa:** M
+
 **Dependências:** TASK-003
 
 **Critério de aceitação:**
@@ -72,6 +80,8 @@ Cada tarefa é atômica: pode ser implementada e testada de forma independente.
 ## TASK-005 — Integration tests
 
 **Descrição:** Criar suite de testes de integração para o query endpoint cobrindo o happy path e os cenários de erro críticos.
+
+**Estimativa:** M
 
 **Dependências:** TASK-004
 

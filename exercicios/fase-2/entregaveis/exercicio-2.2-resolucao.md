@@ -18,15 +18,15 @@ Aplicar o fluxo SDD (Spec Driven Development) para a spec `query-endpoint`: deco
 O arquivo completo está disponível em [`artefatos/tasks-query-endpoint.md`](../artefatos/tasks-query-endpoint.md). Resumo das 5 tarefas e suas dependências:
 
 ```
-TASK-002  Shared types e AppError              (sem dependências)
+TASK-002  Shared types e AppError              (Estimativa: P) (sem dependências)
     ↓
-TASK-001  HTTP handler scaffold                (depende de TASK-002)
+TASK-001  HTTP handler scaffold                (Estimativa: P) (depende de TASK-002)
     ↓
-TASK-003  Integração SearchService             (depende de TASK-001)
+TASK-003  Integração SearchService             (Estimativa: M) (depende de TASK-001)
     ↓
-TASK-004  Integração CompletionService         (depende de TASK-003)
+TASK-004  Integração CompletionService         (Estimativa: M) (depende de TASK-003)
     ↓
-TASK-005  Integration tests                    (depende de TASK-004)
+TASK-005  Integration tests                    (Estimativa: M) (depende de TASK-004)
 ```
 
 ### Critérios de decomposição adotados
