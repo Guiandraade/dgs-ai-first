@@ -6,7 +6,7 @@ Objetivo: validar aderencia dos exercicios 3.1 e 3.2 aos criterios oficiais e ex
 
 - **Cobertura tecnica:** Alta
 - **Cobertura de criterios funcionais:** Alta
-- **Cobertura de evidencias de ferramenta (Copilot/Claude):** Parcial (pendencias documentadas)
+- **Cobertura de evidencias de ferramenta (Copilot/Claude):** Completa
 
 ---
 
@@ -19,7 +19,7 @@ Objetivo: validar aderencia dos exercicios 3.1 e 3.2 aos criterios oficiais e ex
 | Guardrail 2 bloqueia permissao de devolucao de carga perigosa | PASS | [src/services/response-validator.ts](../../../src/services/response-validator.ts) |
 | Code review identifica problemas reais | PASS | [exercicios/fase-3/entregaveis/exercicio-3.1-resolucao.md](./exercicio-3.1-resolucao.md) |
 | Distincao prompt (probabilistico) vs codigo (deterministico) clara | PASS | [exercicios/fase-3/entregaveis/exercicio-3.1-resolucao.md](./exercicio-3.1-resolucao.md) |
-| Evidencia de uso real de Copilot e Claude | PENDENTE | Necessario anexar export/print das iteracoes |
+| Evidencia de uso real de Copilot e Claude | PASS | [EV-3-007](./evidencias-fase-3.md), [EV-3-008](./evidencias-fase-3.md) |
 
 ---
 
@@ -33,16 +33,13 @@ Objetivo: validar aderencia dos exercicios 3.1 e 3.2 aos criterios oficiais e ex
 | Identifica PII em log (`attendantEmail`) | PASS | [exercicios/fase-3/entregaveis/exercicio-3.2-resolucao.md](./exercicio-3.2-resolucao.md) |
 | Comparacao humano x Claude honesta | PASS | [exercicios/fase-3/entregaveis/exercicio-3.2-resolucao.md](./exercicio-3.2-resolucao.md) |
 | Codigo final reescrito aderente ao AGENTS.md | PASS | [src/functions/feedback/handler.ts](../../../src/functions/feedback/handler.ts) |
-| Evidencia de uso real de Copilot e Claude | PENDENTE | Necessario anexar export/print das iteracoes |
+| Evidencia de uso real de Copilot e Claude | PASS | [EV-3-009](./evidencias-fase-3.md), [EV-3-010](./evidencias-fase-3.md) |
 
 ---
 
 ## Lacunas objetivas para ficar 100%
 
-1. **Evidencia Copilot 3.1:** anexar capturas mostrando geracao inicial e correcoes no `response-validator.ts`.
-2. **Evidencia Claude 3.1:** anexar trecho de revisao com os problemas apontados (`.strict`, regex, fallback).
-3. **Evidencia Claude 3.2:** anexar comparacao da revisao humana x Claude.
-4. **Evidencia Copilot 3.2:** anexar geracao da versao final do `feedback handler`.
+Sem lacunas abertas para os criterios do exercicio 3.1 e 3.2 no papel Desenvolvedor.
 
 ---
 

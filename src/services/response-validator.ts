@@ -26,23 +26,34 @@ const SAFE_RESPONSE: StructuredAnswer = {
   confidence_score: 0,
 };
 
+function normalizeForMatch(text: string): string {
+  return text
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/[̀-ͯ]/g, '');
+}
+
 function mentionsDangerousReturn(answer: string): boolean {
-  const normalized = answer.toLowerCase();
-  return normalized.includes('carga perigosa') && normalized.includes('devol');
+  const normalized = normalizeForMatch(answer);
+  return /\bcargas?\s+perigosas?\b/.test(normalized) && /\bdevol/.test(normalized);
 }
 
 function allowsDangerousReturn(answer: string): boolean {
-  const normalized = answer.toLowerCase();
+  const normalized = normalizeForMatch(answer);
+
+  const negationNearby = /\b(nao|nunca|jamais)\b.{0,15}\b(pode|podem|permitid[ao]s?|possivel|autorizad[ao]s?)\b/;
 
   const permissivePatterns = [
     /\bpode\b.{0,40}\bdevol/,
     /\bpodem\b.{0,40}\bdevol/,
     /\bpermitid[ao]s?\b.{0,40}\bdevol/,
-    /\bposs[ii]vel\b.{0,40}\bdevol/,
+    /\bpossivel\b.{0,40}\bdevol/,
     /\bautorizad[ao]s?\b.{0,40}\bdevol/,
   ];
 
-  return permissivePatterns.some((pattern) => pattern.test(normalized));
+  return permissivePatterns.some(
+    (pattern) => pattern.test(normalized) && !negationNearby.test(normalized)
+  );
 }
 
 export function validateModelResponse(raw: unknown, requestId: string): ValidationResult {
